@@ -2,69 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Global Consultant: Professional Proficiency Drill</title>
+    <title>Global Consultant: Enforcement Drill</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .app-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .layer { display: none; } .active { display: block; }
-        .error { color: #c0392b; text-decoration: line-through; }
-        .correction { color: #27ae60; font-weight: bold; }
-        button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; margin-top: 15px; }
-        #feedback { margin-top: 15px; padding: 15px; background: #fff3cd; border: 1px solid #ffeeba; }
+        .input-group { margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid #2c3e50; }
+        .error { color: #c0392b; font-weight: bold; }
+        .success { color: #27ae60; font-weight: bold; }
+        textarea { width: 100%; height: 80px; margin-top: 5px; }
+        .controls { display: flex; gap: 10px; margin-top: 20px; }
+        button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2 id="step-title">1. Situation (Contextual Nominalization)</h2>
-    <div id="drill-box">
-        <textarea id="user-input" rows="4" style="width:100%" placeholder="Enter your response here..."></textarea>
+    <h2>Enforcement Drill: Professional Sponsorship</h2>
+    <p><strong>Requirement:</strong> You must use the requested academic structure to pass.</p>
+
+    <div id="drill-fields">
+        <div class="input-group">
+            <label>1. Situation (Must use Nominalization):</label>
+            <textarea id="situation" placeholder="The formalization of my nursing practice..."></textarea>
+            <div id="err-situation" class="error"></div>
+        </div>
+
+        <div class="input-group">
+            <label>3. Action (Must use Inversion, e.g., "Not only have I..."):</label>
+            <textarea id="action" placeholder="Not only have I..."></textarea>
+            <div id="err-action" class="error"></div>
+        </div>
     </div>
-    
+
     <div class="controls">
-        <button onclick="checkAndNext()">Preview & Next Step</button>
-        <button id="submit-btn" style="display:none;" onclick="finalize()">Submit & Get Score</button>
+        <button onclick="enforceValidation()">Validate & Preview</button>
+        <button onclick="nextLevel()">Next Competency Level</button>
     </div>
-    
-    <div id="feedback" style="display:none;"></div>
-    <button id="tts-btn" style="display:none;" onclick="speakResult()">Play Professional Audio</button>
+
+    <div id="preview" style="margin-top:20px; display:none;"></div>
 </div>
 
 <script>
-    const steps = ['Situation', 'Task', 'Action', 'Result'];
-    let current = 0; let finalResponse = [];
+    function enforceValidation() {
+        let sit = document.getElementById('situation').value;
+        let act = document.getElementById('action').value;
+        let valid = true;
 
-    function checkAndNext() {
-        let val = document.getElementById('user-input').value;
-        let feedback = document.getElementById('feedback');
-        feedback.style.display = 'block';
-
-        // Example Correction Logic (can be expanded)
-        if (val.length < 20) {
-            feedback.innerHTML = '<span class="error">Too short.</span> <span class="correction">Expand using academic register.</span>';
+        // Validation Logic
+        if (!sit.toLowerCase().includes("of") && sit.length < 20) {
+            document.getElementById('err-situation').innerText = "❌ Missing nominalization (e.g., 'The formalization of...').";
+            valid = false;
         } else {
-            feedback.innerHTML = '<span class="correction">✓ Competency criteria met.</span>';
-            finalResponse.push(val);
-            current++;
-            if (current < steps.length) {
-                document.getElementById('step-title').innerText = (current + 1) + ". " + steps[current];
-                document.getElementById('user-input').value = '';
-            } else {
-                document.getElementById('drill-box').style.display = 'none';
-                document.getElementById('submit-btn').style.display = 'block';
-            }
+            document.getElementById('err-situation').innerHTML = "<span class='success'>✓ Correct structure.</span>";
+        }
+
+        if (!act.toLowerCase().includes("not only have i")) {
+            document.getElementById('err-action').innerText = "❌ Missing Inversion (Required: 'Not only have I...').";
+            valid = false;
+        } else {
+            document.getElementById('err-action').innerHTML = "<span class='success'>✓ Correct Inversion used.</span>";
+        }
+
+        if (valid) {
+            document.getElementById('preview').style.display = 'block';
+            document.getElementById('preview').innerHTML = `<strong>Constructed Response:</strong><br>${sit}<br>${act}`;
         }
     }
 
-    function finalize() {
-        let score = 9; // Placeholder logic
-        document.getElementById('feedback').innerHTML = `<strong>Final Band Score: ${score}/9</strong><br>Recommendation: Your structure is robust. Maintain this academic register for the speaking exam.`;
-        document.getElementById('tts-btn').style.display = 'block';
-    }
-
-    function speakResult() {
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(finalResponse.join(". ")));
-    }
+    function nextLevel() { alert("Advancing to Analytical Decision-Making Framework Level."); }
 </script>
 </body>
 </html>
