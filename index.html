@@ -2,74 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Global Consultant: Enforcement Drill</title>
+    <title>Global Consultant: Multi-Level Drill</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .app-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .input-group { margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid #2c3e50; }
-        .error { color: #c0392b; font-weight: bold; }
-        .success { color: #27ae60; font-weight: bold; }
-        textarea { width: 100%; height: 80px; margin-top: 5px; }
+        .input-group { margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; }
         .controls { display: flex; gap: 10px; margin-top: 20px; }
         button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; }
+        #preview { margin-top: 20px; padding: 15px; background: #e8f6f3; border: 1px solid #27ae60; display: none; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2>Enforcement Drill: Professional Sponsorship</h2>
-    <p><strong>Requirement:</strong> You must use the requested academic structure to pass.</p>
+    <h2 id="drill-title">IELTS Mock: Professional Sponsorship</h2>
+    <p id="drill-item"><strong>Test Item:</strong> "Describe how your professional background prepares you for international sponsorship."</p>
 
-    <div id="drill-fields">
-        <div class="input-group">
-            <label>1. Situation (Must use Nominalization):</label>
-            <textarea id="situation" placeholder="The formalization of my nursing practice..."></textarea>
-            <div id="err-situation" class="error"></div>
-        </div>
-
-        <div class="input-group">
-            <label>3. Action (Must use Inversion, e.g., "Not only have I..."):</label>
-            <textarea id="action" placeholder="Not only have I..."></textarea>
-            <div id="err-action" class="error"></div>
-        </div>
+    <div class="input-group">
+        <label>1. Situation (Nominalization):</label>
+        <input type="text" id="situation" placeholder="The ____________ of my career...">
+    </div>
+    <div class="input-group">
+        <label>2. Task (Complex Conjunction):</label>
+        <input type="text" id="task" placeholder="____________ I am aiming to...">
+    </div>
+    <div class="input-group">
+        <label>3. Action (Inversion):</label>
+        <textarea id="action" placeholder="Not only have I ____________..."></textarea>
+    </div>
+    <div class="input-group">
+        <label>4. Result (Hedging):</label>
+        <textarea id="result" placeholder="It would be more ____________ to suggest..."></textarea>
     </div>
 
     <div class="controls">
-        <button onclick="enforceValidation()">Validate & Preview</button>
+        <button onclick="previewResult()">Preview</button>
+        <button onclick="calculateScore()">Submit</button>
         <button onclick="nextLevel()">Next Competency Level</button>
     </div>
 
-    <div id="preview" style="margin-top:20px; display:none;"></div>
+    <div id="preview"></div>
 </div>
 
 <script>
-    function enforceValidation() {
-        let sit = document.getElementById('situation').value;
-        let act = document.getElementById('action').value;
-        let valid = true;
+    const levels = [
+        { title: "IELTS Mock: Professional Sponsorship", item: "Describe how your professional background prepares you for international sponsorship." },
+        { title: "IELTS Mock: Clinical Leadership", item: "Explain how you implement National Patient Safety Goals in a high-pressure environment." },
+        { title: "IELTS Mock: Systemic Impact", item: "Discuss the importance of standardizing medical services for global labor transfer." }
+    ];
+    let currentLevel = 0;
 
-        // Validation Logic
-        if (!sit.toLowerCase().includes("of") && sit.length < 20) {
-            document.getElementById('err-situation').innerText = "❌ Missing nominalization (e.g., 'The formalization of...').";
-            valid = false;
-        } else {
-            document.getElementById('err-situation').innerHTML = "<span class='success'>✓ Correct structure.</span>";
-        }
-
-        if (!act.toLowerCase().includes("not only have i")) {
-            document.getElementById('err-action').innerText = "❌ Missing Inversion (Required: 'Not only have I...').";
-            valid = false;
-        } else {
-            document.getElementById('err-action').innerHTML = "<span class='success'>✓ Correct Inversion used.</span>";
-        }
-
-        if (valid) {
-            document.getElementById('preview').style.display = 'block';
-            document.getElementById('preview').innerHTML = `<strong>Constructed Response:</strong><br>${sit}<br>${act}`;
-        }
+    function nextLevel() {
+        currentLevel = (currentLevel + 1) % levels.length;
+        document.getElementById('drill-title').innerText = levels[currentLevel].title;
+        document.getElementById('drill-item').innerHTML = `<strong>Test Item:</strong> "${levels[currentLevel].item}"`;
+        // Clear inputs
+        document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+        document.getElementById('preview').style.display = 'none';
     }
 
-    function nextLevel() { alert("Advancing to Analytical Decision-Making Framework Level."); }
+    function previewResult() {
+        const s = document.getElementById('situation').value;
+        const t = document.getElementById('task').value;
+        const a = document.getElementById('action').value;
+        const r = document.getElementById('result').value;
+        document.getElementById('preview').style.display = 'block';
+        document.getElementById('preview').innerHTML = `<strong>Constructed Response:</strong><br>${s} ${t} ${a} ${r}`;
+    }
+
+    function calculateScore() {
+        const inputs = [document.getElementById('situation').value, document.getElementById('task').value, document.getElementById('action').value, document.getElementById('result').value];
+        const filled = inputs.filter(i => i.length > 20).length;
+        const score = filled * 2 + 1;
+        alert("Your Estimated Band Score: " + score + "/9. Focus on the 'Reflective R' to boost your score to 9.");
+    }
 </script>
 </body>
 </html>
