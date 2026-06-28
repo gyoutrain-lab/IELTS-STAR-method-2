@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Global Consultant: Professional Drill with Feedback</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
+        .app-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .input-group { margin: 15px 0; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; }
+        .error { color: #c0392b; text-decoration: line-through; }
+        .correction { color: #27ae60; font-weight: bold; }
+        #feedback-panel { margin-top: 20px; padding: 15px; background: #fdf2f2; border: 1px solid #c0392b; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h2>IELTS Mock: Professional Sponsorship</h2>
+    <div class="input-group">
+        <label>1. Action (Use Inversion for emphasis):</label>
+        <textarea id="action" placeholder="e.g., Not only I have..."></textarea>
+    </div>
+
+    <div class="controls">
+        <button onclick="analyzeResponse()">Preview & Correct</button>
+    </div>
+
+    <div id="feedback-panel">
+        <div id="display-area"></div>
+        <div id="score-area"></div>
+    </div>
+</div>
+
+<script>
+    function analyzeResponse() {
+        const action = document.getElementById('action').value;
+        const panel = document.getElementById('feedback-panel');
+        panel.style.display = 'block';
+
+        // Logic for "Correction"
+        if (action.includes("Not only I have")) {
+            document.getElementById('display-area').innerHTML = 
+                `Draft: <span class="error">Not only I have</span> 
+                 <span class="correction">Not only have I...</span> (Competency: Inversion)`;
+            document.getElementById('score-area').innerHTML = "<strong>Estimated Band: 6.5</strong><br><em>Tip: Ensure the auxiliary verb 'have' precedes the subject 'I' for Inversion.</em>";
+        } else {
+            document.getElementById('display-area').innerHTML = "Perfect use of Inversion! (Competency: Advanced Grammar)";
+            document.getElementById('score-area').innerHTML = "<strong>Estimated Band: 9.0</strong>";
+        }
+    }
+</script>
+</body>
+</html>
