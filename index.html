@@ -2,80 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Global Consultant: Multi-Level Drill</title>
+    <title>Global Consultant: Band 9 Grammar Drill</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .app-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .input-group { margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 8px; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; }
+        .input-group { margin: 20px 0; padding: 15px; background: #f8f9fa; border-left: 5px solid #2c3e50; }
+        .prologue { font-size: 0.85em; color: #34495e; margin-bottom: 8px; font-weight: bold; }
+        textarea { width: 100%; height: 55px; }
         .controls { display: flex; gap: 10px; margin-top: 20px; }
         button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; }
-        #preview { margin-top: 20px; padding: 15px; background: #e8f6f3; border: 1px solid #27ae60; display: none; }
+        #preview { margin-top: 20px; padding: 15px; border: 1px solid #ddd; display: none; }
+        .scene { color: #2980b9; font-weight: bold; }
+        .challenge { color: #c0392b; font-weight: bold; }
+        .flow { color: #8e44ad; font-weight: bold; }
+        .sowhat { color: #27ae60; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2 id="drill-title">IELTS Mock: Professional Sponsorship</h2>
-    <p id="drill-item"><strong>Test Item:</strong> "Describe how your professional background prepares you for international sponsorship."</p>
-
+    <h2 id="level-title">Level 1: Professional Sponsorship</h2>
+    
     <div class="input-group">
-        <label>1. Situation (Nominalization):</label>
-        <input type="text" id="situation" placeholder="The ____________ of my career...">
+        <div class="prologue" id="pro-sit">Scene: (Nominalization) "The ____________ of ____________ indicates a paradigm shift in ____________."</div>
+        <textarea id="sit" placeholder="Fill in the blank and expand..."></textarea>
     </div>
     <div class="input-group">
-        <label>2. Task (Complex Conjunction):</label>
-        <input type="text" id="task" placeholder="____________ I am aiming to...">
+        <div class="prologue" id="pro-task">Challenge: (Complex Conjunction) "____________ the complexity of the situation, I was tasked with ____________."</div>
+        <textarea id="task" placeholder="Fill in the blank and expand..."></textarea>
     </div>
     <div class="input-group">
-        <label>3. Action (Inversion):</label>
-        <textarea id="action" placeholder="Not only have I ____________..."></textarea>
+        <div class="prologue" id="pro-act">Action: (Past Progressive + Inversion) "While I was ____________, never had I ____________."</div>
+        <textarea id="act" placeholder="Fill in the blank and expand..."></textarea>
     </div>
     <div class="input-group">
-        <label>4. Result (Hedging):</label>
-        <textarea id="result" placeholder="It would be more ____________ to suggest..."></textarea>
+        <div class="prologue" id="pro-res">Impact: (Academic Hedging) "It would be more ____________ to conclude that this fosters ____________."</div>
+        <textarea id="res" placeholder="Fill in the blank and expand..."></textarea>
     </div>
 
     <div class="controls">
-        <button onclick="previewResult()">Preview</button>
-        <button onclick="calculateScore()">Submit</button>
-        <button onclick="nextLevel()">Next Competency Level</button>
+        <button onclick="preview()">Preview</button>
+        <button onclick="nextLevel()">Next Competency</button>
+        <button onclick="speak()">Speak</button>
     </div>
-
     <div id="preview"></div>
 </div>
 
 <script>
-    const levels = [
-        { title: "IELTS Mock: Professional Sponsorship", item: "Describe how your professional background prepares you for international sponsorship." },
-        { title: "IELTS Mock: Clinical Leadership", item: "Explain how you implement National Patient Safety Goals in a high-pressure environment." },
-        { title: "IELTS Mock: Systemic Impact", item: "Discuss the importance of standardizing medical services for global labor transfer." }
+    const data = [
+        { title: "Level 1: Professional Sponsorship", sit: "The formalization of international standards indicates a paradigm shift in nursing mobility.", task: "Given the complexity of the situation, I was tasked with aligning local practices.", act: "While I was preparing for licensure, never had I encountered such rigorous protocols.", res: "It would be more accurate to conclude that this fosters global professional synergy." },
+        { title: "Level 2: NPSG Compliance", sit: "The prioritization of safety protocols indicates a paradigm shift in institutional accountability.", task: "Considering the complexity of the situation, I was tasked with mitigating clinical errors.", act: "While I was auditing ward safety, never had I observed such systemic vigilance.", res: "It would be more reasonable to conclude that this fosters long-term patient security." },
+        // Add more levels here...
     ];
-    let currentLevel = 0;
+    let current = 0;
 
     function nextLevel() {
-        currentLevel = (currentLevel + 1) % levels.length;
-        document.getElementById('drill-title').innerText = levels[currentLevel].title;
-        document.getElementById('drill-item').innerHTML = `<strong>Test Item:</strong> "${levels[currentLevel].item}"`;
-        // Clear inputs
-        document.querySelectorAll('input, textarea').forEach(el => el.value = '');
+        current = (current + 1) % data.length;
+        document.getElementById('level-title').innerText = data[current].title;
+        document.querySelectorAll('textarea').forEach(t => t.value = '');
         document.getElementById('preview').style.display = 'none';
     }
 
-    function previewResult() {
-        const s = document.getElementById('situation').value;
-        const t = document.getElementById('task').value;
-        const a = document.getElementById('action').value;
-        const r = document.getElementById('result').value;
+    function preview() {
         document.getElementById('preview').style.display = 'block';
-        document.getElementById('preview').innerHTML = `<strong>Constructed Response:</strong><br>${s} ${t} ${a} ${r}`;
+        document.getElementById('preview').innerHTML = 
+            `<p><span class="scene">Scene:</span> ${document.getElementById('sit').value}</p>` +
+            `<p><span class="challenge">Challenge:</span> ${document.getElementById('task').value}</p>` +
+            `<p><span class="flow">Action:</span> ${document.getElementById('act').value}</p>` +
+            `<p><span class="sowhat">Impact:</span> ${document.getElementById('res').value}</p>`;
     }
 
-    function calculateScore() {
-        const inputs = [document.getElementById('situation').value, document.getElementById('task').value, document.getElementById('action').value, document.getElementById('result').value];
-        const filled = inputs.filter(i => i.length > 20).length;
-        const score = filled * 2 + 1;
-        alert("Your Estimated Band Score: " + score + "/9. Focus on the 'Reflective R' to boost your score to 9.");
+    function speak() {
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById('preview').innerText));
     }
 </script>
 </body>
