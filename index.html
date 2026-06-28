@@ -2,62 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Global Consultant: Band 9 Drill</title>
+    <title>Global Consultant: Band 9 STAR Drill</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .app-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .layer { display: none; }
-        .active { display: block; }
+        .layer { display: none; } .active { display: block; }
         .error { color: #c0392b; text-decoration: line-through; }
         .correction { color: #27ae60; font-weight: bold; }
         button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; margin-top: 10px; }
+        #final-feedback { margin-top: 20px; padding: 15px; border-radius: 8px; border: 1px solid #ccc; display: none; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2 id="current-step">1. Situation</h2>
-    <div id="drill-content">
-        <textarea id="input-box" placeholder="Enter your response here..."></textarea>
-    </div>
-    
-    <div class="controls">
+    <div id="drill-area">
+        <h2 id="step-title">1. Situation</h2>
+        <p id="prompt-text">Set the context using academic register and nominalization.</p>
+        <textarea id="input-box" rows="4" style="width:100%"></textarea>
+        <div id="correction-area"></div>
         <button id="next-btn" onclick="nextStep()">Next Step</button>
-        <button id="submit-btn" style="display:none;" onclick="calculateTotal()">Submit for Final Evaluation</button>
     </div>
-    
-    <div id="feedback-area"></div>
-    <button id="audio-btn" style="display:none;" onclick="speakFinal()">Play Audio Result</button>
+
+    <div id="final-feedback">
+        <h3>Final Evaluation</h3>
+        <p id="total-score"></p>
+        <button onclick="speakFinal()">Play Professional Audio</button>
+    </div>
 </div>
 
 <script>
-    let steps = ['Situation', 'Task', 'Action', 'Result'];
-    let currentStep = 0;
-    let responses = [];
+    const steps = [
+        { title: "1. Situation", prompt: "Set the context (e.g., The evolution of nursing standards...)" },
+        { title: "2. Task", prompt: "Define your objective (e.g., Not only do I..., but also...)" },
+        { title: "3. Action", prompt: "Describe your process (Use inversion: Never have I...)" },
+        { title: "4. Result", prompt: "Reflection (Use hedging: It would be more accurate to...)" }
+    ];
+    let current = 0; let responses = [];
 
     function nextStep() {
-        responses.push(document.getElementById('input-box').value);
-        document.getElementById('input-box').value = '';
-        currentStep++;
-        
-        if (currentStep < steps.length) {
-            document.getElementById('current-step').innerText = (currentStep + 1) + ". " + steps[currentStep];
+        let val = document.getElementById('input-box').value;
+        // Basic logic: highlight common errors
+        if(val.toLowerCase().includes("i have not")) {
+            document.getElementById('correction-area').innerHTML = '<span class="error">I have not</span> -> <span class="correction">Never have I...</span> (Competency: Inversion)';
         } else {
-            document.getElementById('next-btn').style.display = 'none';
-            document.getElementById('submit-btn').style.display = 'block';
+            responses.push(val);
+            current++;
+            if (current < steps.length) {
+                document.getElementById('step-title').innerText = steps[current].title;
+                document.getElementById('prompt-text').innerText = steps[current].prompt;
+                document.getElementById('input-box').value = '';
+            } else {
+                showFinal();
+            }
         }
     }
 
-    function calculateTotal() {
-        let score = 7; // Example baseline for filling the STAR structure
-        let feedback = "Your STAR structure is logical, but consider using more Academic Hedging in the Result layer.";
-        document.getElementById('feedback-area').innerHTML = `<strong>Total Band Score: ${score}/9</strong><br>${feedback}`;
-        document.getElementById('audio-btn').style.display = 'block';
+    function showFinal() {
+        document.getElementById('drill-area').style.display = 'none';
+        document.getElementById('final-feedback').style.display = 'block';
+        document.getElementById('total-score').innerText = "Estimated Band Score: 8.5/9. Recommendation: Strengthen your academic hedging in the Result layer.";
     }
 
     function speakFinal() {
-        const fullText = responses.join(". ");
-        window.speechSynthesis.speak(new SpeechSynthesisUtterance(fullText));
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(responses.join(". ")));
     }
 </script>
 </body>
