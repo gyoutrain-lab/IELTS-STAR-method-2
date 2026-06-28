@@ -2,52 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Global Consultant: Professional Drill with Feedback</title>
+    <title>Global Consultant: Band 9 Drill</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; }
         .app-container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .input-group { margin: 15px 0; }
-        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; }
+        .layer { display: none; }
+        .active { display: block; }
         .error { color: #c0392b; text-decoration: line-through; }
         .correction { color: #27ae60; font-weight: bold; }
-        #feedback-panel { margin-top: 20px; padding: 15px; background: #fdf2f2; border: 1px solid #c0392b; display: none; }
+        button { padding: 10px 20px; cursor: pointer; background: #2c3e50; color: white; border: none; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <h2>IELTS Mock: Professional Sponsorship</h2>
-    <div class="input-group">
-        <label>1. Action (Use Inversion for emphasis):</label>
-        <textarea id="action" placeholder="e.g., Not only I have..."></textarea>
+    <h2 id="current-step">1. Situation</h2>
+    <div id="drill-content">
+        <textarea id="input-box" placeholder="Enter your response here..."></textarea>
     </div>
-
+    
     <div class="controls">
-        <button onclick="analyzeResponse()">Preview & Correct</button>
+        <button id="next-btn" onclick="nextStep()">Next Step</button>
+        <button id="submit-btn" style="display:none;" onclick="calculateTotal()">Submit for Final Evaluation</button>
     </div>
-
-    <div id="feedback-panel">
-        <div id="display-area"></div>
-        <div id="score-area"></div>
-    </div>
+    
+    <div id="feedback-area"></div>
+    <button id="audio-btn" style="display:none;" onclick="speakFinal()">Play Audio Result</button>
 </div>
 
 <script>
-    function analyzeResponse() {
-        const action = document.getElementById('action').value;
-        const panel = document.getElementById('feedback-panel');
-        panel.style.display = 'block';
+    let steps = ['Situation', 'Task', 'Action', 'Result'];
+    let currentStep = 0;
+    let responses = [];
 
-        // Logic for "Correction"
-        if (action.includes("Not only I have")) {
-            document.getElementById('display-area').innerHTML = 
-                `Draft: <span class="error">Not only I have</span> 
-                 <span class="correction">Not only have I...</span> (Competency: Inversion)`;
-            document.getElementById('score-area').innerHTML = "<strong>Estimated Band: 6.5</strong><br><em>Tip: Ensure the auxiliary verb 'have' precedes the subject 'I' for Inversion.</em>";
+    function nextStep() {
+        responses.push(document.getElementById('input-box').value);
+        document.getElementById('input-box').value = '';
+        currentStep++;
+        
+        if (currentStep < steps.length) {
+            document.getElementById('current-step').innerText = (currentStep + 1) + ". " + steps[currentStep];
         } else {
-            document.getElementById('display-area').innerHTML = "Perfect use of Inversion! (Competency: Advanced Grammar)";
-            document.getElementById('score-area').innerHTML = "<strong>Estimated Band: 9.0</strong>";
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('submit-btn').style.display = 'block';
         }
+    }
+
+    function calculateTotal() {
+        let score = 7; // Example baseline for filling the STAR structure
+        let feedback = "Your STAR structure is logical, but consider using more Academic Hedging in the Result layer.";
+        document.getElementById('feedback-area').innerHTML = `<strong>Total Band Score: ${score}/9</strong><br>${feedback}`;
+        document.getElementById('audio-btn').style.display = 'block';
+    }
+
+    function speakFinal() {
+        const fullText = responses.join(". ");
+        window.speechSynthesis.speak(new SpeechSynthesisUtterance(fullText));
     }
 </script>
 </body>
